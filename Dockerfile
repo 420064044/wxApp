@@ -19,22 +19,24 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
 	php7-pdo \
     php7-pdo_mysql \
     php7-fpm \
-    php7-curl \   
-    nginx \
+    php7-curl \
+    apache2 \
+    php7-apache2 \
     && rm -f /var/cache/apk/*
 
 # 设定工作目录
 WORKDIR /app
 
-# 将当前目录下所有文件拷贝到/app （.dockerignore中文件除外）
+# 将当前目录下所有文件拷贝到/app（.dockerignore中文件除外）
 COPY . /app
 
-# 替换nginx、fpm、php配置
-RUN cp /app/conf/nginx.conf /etc/nginx/conf.d/default.conf \
-    && cp /app/conf/fpm.conf /etc/php7/php-fpm.d/www.conf \
-    && cp /app/conf/php.ini /etc/php7/php.ini \
-    && mkdir -p /run/nginx \
+# 修改文件目录权限
+# 替换apache配置文件
+RUN chown -R apache:apache /app \
+    && chmod -R 755 /app \
     && chmod -R 777 /app/runtime \
+    && cp /app/conf/httpd.conf /etc/apache2/httpd.conf \
+    && cp /app/conf/php.ini /etc/php7/php.ini \
     && mv /usr/sbin/php-fpm7 /usr/sbin/php-fpm
 
 # 暴露端口
@@ -44,5 +46,5 @@ EXPOSE 80
 # 执行启动命令.
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
 # 请参考[Docker官方文档之CMD命令](https://docs.docker.com/engine/reference/builder/#cmd)
-CMD ["sh", "run.sh"]
+CMD ["httpd", "-DFOREGROUND"]
 

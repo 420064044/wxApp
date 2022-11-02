@@ -19,19 +19,17 @@
 ## Dockerfile最佳实践
 请参考[如何提高项目构建效率](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/build/speed.html)
 
-
 ## 目录结构说明
 ~~~
 .
-├── Dockerfile                  Dockerfile 文件
+├── Dockerfile           Dockerfile 文件
 ├── README.md                   README 文件
 ├── app                         应用目录
 │   ├── controller              控制器目录
 │   ├── model                   模型目录
 │   └── view                    视图目录
 ├── conf                        配置文件
-│   ├── fpm.conf                fpm 配置
-│   ├── nginx.conf              nginx 配置
+│   ├── apache.conf             apache 配置
 │   └── php.ini                 php 配置
 ├── config                      thinkphp 配置
 ├── container.config.json       模板部署「服务设置」初始化配置（二开请忽略）
@@ -124,7 +122,6 @@ curl -X POST -H 'content-type: application/json' -d '{"action": "inc"}' https://
 - MYSQL_PASSWORD
 - MYSQL_USERNAME
 以上三个变量的值请按实际情况填写。如果使用云托管内MySQL，可以在控制台MySQL页面获取相关信息。
-
 
 
 ## License
